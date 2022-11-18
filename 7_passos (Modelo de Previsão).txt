@@ -1,0 +1,157 @@
+### TEORIA
+
+# Os 7 passos para construir um modelo de previsão
+
+# Modelo de previsão:
+    * Nosso objetivo: Prever o preço da diária dos imóveis
+    * O Modelo é como se fosse uma "equação"
+    * Y = a*X + b
+
+
+
+Machine Learning é o que vamos usar para chegar nessa equação
+
+
+
+^                               É uma equação de primeiro grau, com o x sendo vários valores, algo como:
+|         /                             x1 = quartos      x2= camas       x3 = banheiros      x4= amenities
+|       /                                           Y = a*x1 + b*x2 + c*x3 + d*x4 + ... + z
+|     /
+|   /
+|_/_______________>
+
+
+##7 passos:
+    -Passo 1: Definir se é Classificação ou Regressão
+    -Passo 2: Escolher as Métricas para avaliar o mundo
+    -Passo 3: Escolher quais modelos vamos usar/testar
+    -Passo 4: Treinar os modelos e testar
+    -Passo 5: Comparar os Resultados dos Modelos e Escolher o Vencedor
+    -Passo 6: Analisar o Melhor Modelo mais a Fundo
+    -Passo 7: Fazer ajustes no Melhor Modelo
+
+
+##Passo 1: Classificação ou Regressão?
+
+    Classificação: Categoria (Separar entre A,B,C)
+        - Ex: Diagnóstico, SPAM
+
+    Regressão: Valor Específico (um número)
+        - Ex: Preço, Velocidade
+
+Objetivo: Calcular o preço da diária do imóvel (no nosso caso, o problema é de Regressão):
+    - Problema de Regressão
+            - A regressão mais simples é y = a*x + b
+            - Mas como vimos, podemos ter inúmeras variáveis
+    - Como o Modelo Encontra essas variáveis?
+            - Utilizando Machine Learning, agora, como?
+    - Existem inúmeros modelos, mas vamos focar aqui nos 3 que vamos usar
+
+##Passo 2: Escolher as Métricas para avaliar o modelo
+
+Como definir o melhor modelo? É o que "erra menos"? É o que "acerta mais"?
+
+Existem diversas métricas, usaremos 2 aqui:
+   - R²
+        - De 0 a 1 -> Quanto Maior, Melhor
+        - Explicação Lúdica: Mede "o quanto" dos valores o modelo consegue explicar
+        - Ex.: 92% significa que o modelo consegue explicar 92% da variância dos dados a partir das informações que dá para ele
+
+   - RSME (Erro quadrátrico Médio ou Raiz do Erro Quadrático Médio)
+        - Pode ser qualquer valor ( Quanto Menor, Melhor )
+        - Mede o "quanto o modelo erra"
+        
+##Passo 3 - Escolher quais Modelos vamos usar e testar     
+
+Modelos de Regressão que vamos usar
+    - Linear Regression ( Regressão Linear )
+    - Random Forest Regressor ( Não Traduz, mas em essência: Regressão Floresta de Árvores de Decisão Aleatória )
+    - Extra Trees ( Semelhante ao Random Forest, masc om algumas diferenças significativas )
+    
+* Obs: Sobre a construção dos modelos
+    - Python já tem tudo pronto
+    - É importante entendermos como o modelo funciona para:
+        - Quais são as situações que usaremos?
+        - O que pode ajudar/prejudicar o modelo
+        - Adaptar algum parâmetro do modelo, caso a gente precise
+    - Tem MUITA Matemática e Estatística por trás dos Modelos
+        - No início, não que você se preocupe com isso, afinal como os modelos já existem, para alguém do nível inicial você não precisa saber dossp
+        - Agora, se você quer virar o cara sinistro de Ciência de Dados, você vai precisar entrar nisso no futuro
+        - Eu não me preocuparia com isso agora
+        
+        
+Linear Regression
+    - Traça a "Melhor Reta"
+    - Encontra a reta que minimiza os erros
+
+Random Forest e Extra Trees são Árvores de Decisão:
+
+Ex.: Jogo do Akinator
+
+                                   | Sexo feminino |
+                           (n)             |             (s)
+                             |----------------------------|
+                         | Ator? |            | Jogadora de Futebol? |
+                         
+                         
+ 
+Random Forest:
+ - Ao invés de pegar toda a base para criar a árvore de decisão, ela cria várias árvores de decisão com pedaços menores da base e faz a média das árvores
+ - Escolhe a melhor pergunta
+
+Extra Trees:
+ - Mesma essência do Random Forest, mas com 1 diferença principal do método
+ - Escolhe uma pergunta aleatória
+
+A essência é parecida mas o método usado para chegar lá vai ser levemente diferente, o que pode impactar no resultado final. Ex.:
+ 
+#Passo 4 - Treinar e Testar todos os Modelos
+
+* Separação da Base de Dados em Treino e Teste
+    - Separamos os dados aleatoriamente em 2 conjuntos:
+        - Treino
+        - Teste
+    - O treino são os dados que o seu modelo vai usar para aprender
+    - O teste são os dados que usamos para ver se o modelo aprendeu bem
+    
+    - Ex: 80% dados treino e 20% dados de teste.
+    - Avaliamos sempre o resultado nos testes, para não correr o risco de overfitting
+    
+* Overfitting:
+    - Imagine que a gente tenha dado todos os dados para o modelo aprender
+    - Nesse caso, o modelo aparentemente já viu de tudo, enão ele seria melhor
+    - MAS, na prática corremos o risco que o modelo acabe ficando específico demais para os dados de treino e quando formos usar no mundo real, ele faça uma péssima previsão
+    - Por isso, p´recisamos dos dados de teste, para ver se, em uma situação igual ao mundo real, ele vai funcionar bem
+
+#Passo 5 - Comparar os Resultados do Teste e Escolher o Vencedor
+
+* Análise dos Modelos paelas Métricas que escolhemos
+    - Calculamos o R² e o RSME para cada modelo
+    - Escolhemos 1 métrica para ser a principal, digamos R²
+    - Nesse caso, o modelo com o maior R² vai ser considerado o melhor modelo
+    - Usamos o RSME para critério de desempate ou para comparar modelos com R² parecidos
+    - MAS, esses não são os únicos critérios
+        - Um modelo que demore 1hr para treinar e fazer previsões é pior do que um modelo que demore 5min
+        - Um modelo que precise de menos informações para funcionar (mais simples) é melhor do que um modelo mais complexo
+        
+#Passo 6 - Entender como Funciona o Melhor Modelo
+
+* Como esse modelo funciona? Quais as features mais importantes?
+    - Depois do modelo pronto e escolhido o melhor modelo, analisamos como o melhor modelo funciona
+    - Identificamos a importa^ncia de cada feature para ver oportunidades de melhoria
+    - Ex: Se uma feature/coluna não é utilizada pelo nosso modelo, ou é muito pouco importante, podemos testar retirar essa feature/coluna do modelo e ver o resultado
+    - O resultado pode melhorar ou piorar, mas lembre sempre de olhar:
+        - Métricas escolhidas (R² e RSME)
+        - Velocidade do Modelo
+        - Simplicidade do Modelo
+        
+        
+#Passo 7 - Otimizar e Ajustar o Melhor Modelo
+
+* Tstamos a cada mudança que fazemos no modelo para fazer um ajuste final
+    - Vemos se as features identificadas no último passo podem ser retiradas
+    -  A cada etapa, treinamos e testamos o modelo, sempre comparando com o resultado original e o resultado anterior
+    - Objetivo:
+        - Encontrar uma possível melhoria ao modelo ( inclusive de previsão -> maior R² ou menor RSME )
+        - Ver se conseguimos chegar no mesmo resultado ou em um resultado muito próximo como um modelo mais simples e mais rápido
+        - Fazemos outros testes que a gente queira ou tenha planejado nas etapas anteriores do projeto ( ex.: testar não exclui uma coluna ou tratamento de outlier )
